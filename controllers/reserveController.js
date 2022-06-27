@@ -1,6 +1,9 @@
 const AppError = require("../utils/appError") ;
 const axios = require("axios").default ;
 
+
+
+
 const config = {
     headers:{
         "Cache-Control": "no-cache",
@@ -10,12 +13,25 @@ const config = {
 
     }
   };
+
+
+
+  var locations = [] ; 
+
 exports.getCitiesCode =   async (req, res) => { 
 try{
     const url = "https://respina24.ir/flight/Locations1" ;
     console.log("getCodes req recieved");
     const df = await axios.get(url) ;
-    res.send(df.data) ;
+
+    for(var i = 0 ; i < df.data['Locations'].length; i++ ) {
+        let tmp = {
+            "iata" : df.data['Locations'][i].iata ,
+                "perisanName" : df.data['Locations'][i].persianname
+        }
+        locations.push(tmp) ;
+    }
+    res.send(locations) ;
 }
 catch(error) {
     console.log(error); 
