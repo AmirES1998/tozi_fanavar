@@ -24,3 +24,19 @@ catch(error) {
 }
 
 }
+
+
+exports.getFlightList = async (req, res) => { 
+try {
+    console.log("getFlightList req recieved");
+    const url = "https://respina24.ir/flight/Availability" ;
+    body = req.body ;
+    const response = await axios.post(url, body) ;
+    res.send(response.data);
+}
+catch(err) {
+console.log(err);
+}
+
+
+}
