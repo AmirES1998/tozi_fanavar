@@ -1,7 +1,7 @@
 const AppError = require("../utils/appError") ;
 const axios = require("axios").default ;
-
-
+const app = require("../app")
+const actions = require("../db/databaseAction");
 
 
 const config = {
@@ -44,18 +44,40 @@ catch(error) {
 
 exports.getFlightList = async (req, res) => { 
 try {
+
+    
+    const body = req.body ;
     console.log("getFlightList req recieved");
     const url = "https://respina24.ir/flight/Availability" ;
-    body = req.body ;
-    const response = await axios.post(url, body) ;
+    let response; 
+    let cachedBody =await actions.getCachedBody('body')
+        .then(function(data) {return data;})
+        .catch(err => console.log(err)) ;
 
-    // const result = await redis.hSet("post body hash", "from", body["from"], "to",body["to"], "departureDate", body["departureDate"] );
-    // console.log(result);
-    res.send(response.data["list"]);
+    
+
+    
+    if(JSON.stringify(body) === JSON.stringify(cachedBody)) { 
+        response = await actions.getCachedFlightList();
+        console.log("res as cached Data");
+       
+    }
+    else { 
+        actions.addObject("body", body);
+        const data = await axios.post(url, body) ;
+        response = data.data["list"] ;
+        actions.addFlightList("Flights", response) ; 
+        console.log("res as api fetch Data");
+        
+    }
+
+    res.send(response);
+
 }
 catch(err) {
 console.log(err);
 }
+
 
 
 }

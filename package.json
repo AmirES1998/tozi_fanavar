@@ -5,7 +5,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "redis": "^4.1.0"
+    "redis": "^4.1.0",
+    "redis-hashes": "^0.6.1"
   },
   "scripts": {
     "start": "npm-run-all -l -p serve serve:front",
