@@ -48,7 +48,10 @@ try {
     const url = "https://respina24.ir/flight/Availability" ;
     body = req.body ;
     const response = await axios.post(url, body) ;
-    res.send(response.data);
+
+    // const result = await redis.hSet("post body hash", "from", body["from"], "to",body["to"], "departureDate", body["departureDate"] );
+    // console.log(result);
+    res.send(response.data["list"]);
 }
 catch(err) {
 console.log(err);
